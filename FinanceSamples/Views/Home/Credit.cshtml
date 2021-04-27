@@ -1,0 +1,53 @@
+﻿@model CreditData
+
+@{
+    ViewData["Title"] = "Расчет платежей по кредиту";
+}
+
+    <div align="center" ng-app>
+        <div class="card">
+            <h1>@ViewData["Title"]</h1>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <form asp-action="Credit" method="post">
+                <table>
+                    <tr><td><label asp-for="Amount">Сумма кредита</label></td><td><input asp-for="Amount"></td></tr>
+                    <tr><td><label asp-for="Percent">Процентная ставка</label></td><td><input asp-for="Percent"></td></tr>
+                    <tr><td><input type="checkbox" class="onoffswitch-checkbox" ng-model="useCommission" value="@Model.MontlyCommission<>0" /><label>Использовать месячную комиссию</label></td><td></td></tr>
+                    <tr><td><label ng-show="useCommission" asp-for="MontlyCommission">Сумма комиссии</label></td><td><input ng-show="useCommission" asp-for="MontlyCommission" /></td></tr>
+                    <tr><td><label asp-for="Period">Срок</label></td><td><input asp-for="Period"></td></tr>
+                </table>
+                <br />
+                <p><button type="submit">Расчитать платежи</button></p>
+            </form>
+        </div>
+        <br />
+        @if (Model.Result != null)
+        {
+        <div class="card">
+            <h1>Список платежей</h1>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Платеж №</th>
+                        <th>Тело кредита</th>
+                        <th>Проценты</th>
+                        <th>Комиссия</th>
+                        <th>Сумма платежа</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model.Result)
+                    {
+                        <tr>
+                            <td class="text-center">@row.Payment</td>
+                            <td class="text-center">@row.LoanBalance.ToString("f2")</td>
+                            <td class="text-center">@row.Percent.ToString("f2")</td>
+                            <td class="text-center">@row.Commission.ToString("f2")</td>
+                            <td class="text-center">@row.PayAmount.ToString("f2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>

@@ -1,0 +1,52 @@
+﻿@model DepositData
+
+@{
+    ViewData["Title"] = "Расчет дохода по депозиту";
+}
+
+<div align="center" ng-app>
+    <div class="card">
+        <h1>@ViewData["Title"]</h1>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form asp-action="Deposit" method="post">
+            <table>
+                <tr><td><label asp-for="Amount">Сумма депозита</label></td><td><input asp-for="Amount"></td></tr>
+                <tr><td><label asp-for="Percent">Процентная ставка</label></td><td><input asp-for="Percent"></td></tr>
+                <tr><td><label asp-for="IsMontlyСapitalization">Капитализация процентов</label></td><td><input asp-for="IsMontlyСapitalization" /></td></tr>
+                <tr><td><label asp-for="Period">Срок</label></td><td><input asp-for="Period"></td></tr>
+            </table>
+            <br />
+            <p><button type="submit">Расчитать доход</button></p>
+        </form>
+    </div>
+    <br />
+    @if (Model.Result != null)
+    {
+        <div class="card">
+            <h1>Список начислений</h1>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Период №</th>
+                        <th>Начальная сумма</th>
+                        <th>Проценты</th>
+                        <th>Всего процентов</th>
+                        <th>Конечная сумма</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model.Result)
+                    {
+                        <tr>
+                            <td class="text-center">@row.Period</td>
+                            <td class="text-center">@row.StartAmount.ToString("f2")</td>
+                            <td class="text-center">@row.Percent.ToString("f2")</td>
+                            <td class="text-center">@row.PercentAmount.ToString("f2")</td>
+                            <td class="text-center">@row.EndAmount.ToString("f2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
