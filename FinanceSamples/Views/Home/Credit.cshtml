@@ -25,6 +25,7 @@
         {
         <div class="card">
             <h1>Список платежей</h1>
+            @{ decimal fullInc = 0; }
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -38,7 +39,9 @@
                 <tbody>
                     @foreach (var row in Model.Result)
                     {
-                        <tr>
+                        fullInc += row.Percent;
+                        fullInc += row.Commission;
+                       <tr>
                             <td class="text-center">@row.Payment</td>
                             <td class="text-center">@row.LoanBalance.ToString("f2")</td>
                             <td class="text-center">@row.Percent.ToString("f2")</td>
@@ -48,6 +51,7 @@
                     }
                 </tbody>
             </table>
+            <div class="text-right">Всего переплата: @fullInc.ToString("f2")</div>
         </div>
         }
     </div>
