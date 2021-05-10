@@ -10,8 +10,8 @@ namespace FinanceSamples.Calculations
     {
         public static void Credit(CreditData creditData)
         {
-            if (creditData.Amount <= 0
-                || creditData.MontlyCommission < 0
+            if (creditData.Amount < 0.01m
+               || creditData.MontlyCommission < 0
                 || creditData.Percent < 0
                 || creditData.Period <= 0) return;
 
@@ -39,7 +39,7 @@ namespace FinanceSamples.Calculations
 
         public static void Deposit(DepositData depositData)
         {
-            if (depositData.Amount <= 0
+            if (depositData.Amount < 0.01m
                 || depositData.Percent < 0
                 || depositData.Period <= 0) return;
 

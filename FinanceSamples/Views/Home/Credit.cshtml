@@ -3,28 +3,31 @@
 @{
     ViewData["Title"] = "Расчет платежей по кредиту";
 }
+<script>
+    commission = @Model.UseCommission;
+</script>
 
-    <div align="center" ng-app>
+<div align="center" ng-app>
+    <div class="card">
+        <h1>@ViewData["Title"]</h1>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form asp-action="Credit" method="post">
+            <table>
+                <tr><td><label asp-for="Amount">Сумма кредита</label></td><td><input asp-for="Amount"></td></tr>
+                <tr><td><label asp-for="Percent">Процентная ставка(годовых)</label></td><td><input asp-for="Percent"></td></tr>
+                <tr><td><input ng-model="commission" asp-for="UseCommission" /><label>Использовать месячную комиссию</label></td><td></td></tr>
+                <tr><td><label ng-show="commission" asp-for="MontlyCommission">Сумма месячной комиссии</label></td><td><input ng-show="commission" asp-for="MontlyCommission" /></td></tr>
+                <tr><td><label asp-for="Period">Срок в месяцах</label></td><td><input asp-for="Period"></td></tr>
+            </table>
+            <br />
+            <p><button type="submit">Расчитать платежи</button></p>
+        </form>
+    </div>
+    <br />
+    @if (Model.Result != null)
+    {
         <div class="card">
-            <h1>@ViewData["Title"]</h1>
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <form asp-action="Credit" method="post">
-                <table>
-                    <tr><td><label asp-for="Amount">Сумма кредита</label></td><td><input asp-for="Amount"></td></tr>
-                    <tr><td><label asp-for="Percent">Процентная ставка</label></td><td><input asp-for="Percent"></td></tr>
-                    <tr><td><input type="checkbox" class="onoffswitch-checkbox" ng-model="useCommission" value="@Model.MontlyCommission<>0" /><label>Использовать месячную комиссию</label></td><td></td></tr>
-                    <tr><td><label ng-show="useCommission" asp-for="MontlyCommission">Сумма комиссии</label></td><td><input ng-show="useCommission" asp-for="MontlyCommission" /></td></tr>
-                    <tr><td><label asp-for="Period">Срок</label></td><td><input asp-for="Period"></td></tr>
-                </table>
-                <br />
-                <p><button type="submit">Расчитать платежи</button></p>
-            </form>
-        </div>
-        <br />
-        @if (Model.Result != null)
-        {
-        <div class="card">
-            <h1>Список платежей</h1>
+            <h1>Список месячных платежей</h1>
             @{ decimal fullInc = 0; }
             <table class="table table-bordered table-striped">
                 <thead>
@@ -41,7 +44,7 @@
                     {
                         fullInc += row.Percent;
                         fullInc += row.Commission;
-                       <tr>
+                        <tr>
                             <td class="text-center">@row.Payment</td>
                             <td class="text-center">@row.LoanBalance.ToString("f2")</td>
                             <td class="text-center">@row.Percent.ToString("f2")</td>
@@ -53,5 +56,5 @@
             </table>
             <div class="text-right">Всего переплата: @fullInc.ToString("f2")</div>
         </div>
-        }
-    </div>
+    }
+</div>
